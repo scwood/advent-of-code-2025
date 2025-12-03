@@ -13,12 +13,8 @@ function main(argv: string[]) {
 
     for (let i = start; i <= end; i++) {
       const id = i.toString();
-      console.log("ID", id);
       if (!isValid(id)) {
-        console.log("Invalid");
         finalSum += i;
-      } else {
-        console.log("Valid");
       }
     }
   }
@@ -27,8 +23,10 @@ function main(argv: string[]) {
 }
 
 function isValid(id: string): boolean {
+  if (id.length === 1) {
+    return true;
+  }
   const substrings = getSubstrings(id);
-  console.log("Substrings", substrings);
   for (const substring of substrings) {
     if (isSubstringRepeating(id, substring)) {
       return false;
@@ -39,21 +37,23 @@ function isValid(id: string): boolean {
 
 function getSubstrings(id: string) {
   const result = [];
-  for (let i = 1; i <= id.length; i++) {
+  for (let i = 1; i <= Math.ceil(id.length / 2); i++) {
     result.push(id.substring(0, i));
   }
   return result;
 }
 
 function isSubstringRepeating(id: string, substring: string) {
-  for (let i = 0; i <= id.length - substring.length; i += substring.length) {
-    const substringToCompare = id.substring(i, i + substring.length);
-    console.log("comparing: ", substringToCompare);
-    if (substring !== id.substring(i, i + substring.length)) {
-      return false;
-    }
+  const chunks = chunkString(id, substring.length);
+  return chunks.every((chunk) => chunk === substring);
+}
+
+function chunkString(s: string, chunkSize: number) {
+  const result = [];
+  for (let i = 0; i < s.length; i += chunkSize) {
+    result.push(s.substring(i, i + chunkSize));
   }
-  return true;
+  return result;
 }
 
 if (import.meta.main) {
