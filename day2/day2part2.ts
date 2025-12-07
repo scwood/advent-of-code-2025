@@ -56,6 +56,4 @@ function chunkString(s: string, chunkSize: number) {
   return result;
 }
 
-if (import.meta.main) {
-  main(process.argv);
-}
+main(process.argv);

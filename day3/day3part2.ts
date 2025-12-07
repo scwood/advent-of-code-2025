@@ -31,6 +31,4 @@ function getLargestJoltage(bank: string): number {
   return parseInt(result);
 }
 
-if (import.meta.main) {
-  main(process.argv);
-}
+main(process.argv);

@@ -21,6 +21,4 @@ function main(argv: string[]) {
   console.log(totalJoltage);
 }
 
-if (import.meta.main) {
-  main(process.argv);
-}
+main(process.argv);

@@ -31,6 +31,4 @@ function main(argv: string[]) {
   console.log(password);
 }
 
-if (import.meta.main) {
-  main(process.argv);
-}
+main(process.argv);

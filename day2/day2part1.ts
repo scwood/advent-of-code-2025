@@ -32,6 +32,4 @@ function main(argv: string[]) {
   console.log(finalSum);
 }
 
-if (import.meta.main) {
-  main(process.argv);
-}
+main(process.argv);
