@@ -26,10 +26,10 @@ function countAndRemovePaper(grid: string[][]): {
   newGrid: string[][];
 } {
   let count = 0;
-  let newGrid: string[][] = [];
+  const newGrid: string[][] = [];
 
   for (let y = 0; y < grid.length; y++) {
-    let newRow = [...grid[y]];
+    const newRow = [...grid[y]];
 
     for (let x = 0; x < grid[y].length; x++) {
       if (!isPaper(grid, x, y)) {
