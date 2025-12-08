@@ -10,14 +10,9 @@ function main(argv: string[]): void {
   const startY = 0;
 
   // Create 2d array to cache count values
-  const counts: number[][] = [];
-  for (let y = 0; y < manifold.length; y++) {
-    const row: number[] = [];
-    for (let x = 0; x < manifold[y].length; x++) {
-      row.push(0);
-    }
-    counts.push(row);
-  }
+  const counts: number[][] = new Array(manifold.length)
+    .fill(undefined)
+    .map(() => new Array(manifold[0].length).fill(0));
 
   const numberOfTimelines = countTimelines(manifold, counts, startX, startY);
 
