@@ -8,34 +8,9 @@ function main(argv: string[]): void {
 
   const startX = manifold[0].findIndex((value) => value === "S");
   const startY = 0;
-  visit(manifold, startX, startY);
-  const counts = countTimelines(manifold);
-  console.log(counts[startY][startX]);
-}
 
-function visit(manifold: string[][], x: number, y: number): void {
-  if (y < 0 || y > manifold.length - 1 || x < 0 || x > manifold[0].length - 1) {
-    return;
-  }
-  const currentChar = manifold[y][x];
-  switch (currentChar) {
-    case ".":
-    case "S":
-      manifold[y][x] = "|";
-      visit(manifold, x, y + 1);
-      break;
-    case "^":
-      visit(manifold, x - 1, y);
-      visit(manifold, x + 1, y);
-      break;
-    case "|":
-    default:
-  }
-}
-
-function countTimelines(manifold: string[][]): number[][] {
+  // Create 2d array to cache the count values for a given space
   const counts: number[][] = [];
-
   for (let y = 0; y < manifold.length; y++) {
     const row: number[] = [];
     for (let x = 0; x < manifold[y].length; x++) {
@@ -44,25 +19,55 @@ function countTimelines(manifold: string[][]): number[][] {
     counts.push(row);
   }
 
-  for (let y = manifold.length - 1; y >= 0; y--) {
-    for (let x = 0; x < manifold[y].length; x++) {
-      const char = manifold[y][x];
-      if (char !== "|") {
-        continue;
-      }
-      if (y === manifold.length - 1) {
-        counts[y][x] = 1;
-        continue;
-      }
-      const lowerChar = manifold[y + 1][x];
-      if (lowerChar === "|") {
-        counts[y][x] = counts[y + 1][x];
-      } else if (lowerChar === "^") {
-        counts[y][x] = counts[y + 1][x - 1] + counts[y + 1][x + 1];
-      }
-    }
+  const numberOfTimelines = countTimelines(manifold, counts, startX, startY);
+
+  console.log(numberOfTimelines);
+}
+
+function countTimelines(
+  manifold: string[][],
+  counts: number[][],
+  x: number,
+  y: number,
+): number {
+  // If out of bounds, return 0
+  if (y < 0 || y > manifold.length - 1 || x < 0 || x > manifold[0].length - 1) {
+    return 0;
   }
-  return counts;
+
+  // If at the bottom of the tree, return 1
+  if (y === manifold.length - 1) {
+    return 1;
+  }
+
+  const currentChar = manifold[y][x];
+  switch (currentChar) {
+    // If an unvisited space, mark as visited and recurse to space below and
+    // update count cache
+    case ".":
+    case "S":
+      manifold[y][x] = "|";
+      counts[y][x] = countTimelines(manifold, counts, x, y + 1);
+      return counts[y][x];
+    // If a split, check cache for existing left and right values, otherwise
+    // recurse
+    case "^":
+      const leftCount =
+        counts[y][x - 1] > 0
+          ? counts[y][x - 1]
+          : countTimelines(manifold, counts, x - 1, y);
+      const rightCount =
+        counts[y][x + 1] > 0
+          ? counts[y][x + 1]
+          : countTimelines(manifold, counts, x + 1, y);
+      return leftCount + rightCount;
+    // If a visited space, return cached count value
+    case "|":
+      return counts[y][x];
+    // Shouldn't hit this
+    default:
+      return 0;
+  }
 }
 
 main(process.argv);
