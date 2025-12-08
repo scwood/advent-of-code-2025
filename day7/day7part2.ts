@@ -9,7 +9,7 @@ function main(argv: string[]): void {
   const startX = manifold[0].findIndex((value) => value === "S");
   const startY = 0;
 
-  // Create 2d array to cache the count values for a given space
+  // Create 2d array to cache count values
   const counts: number[][] = [];
   for (let y = 0; y < manifold.length; y++) {
     const row: number[] = [];
@@ -49,7 +49,7 @@ function countTimelines(
       manifold[y][x] = "|";
       counts[y][x] = countTimelines(manifold, counts, x, y + 1);
       return counts[y][x];
-    // If a split, check cache for existing left and right values, otherwise
+    // If a splitter, check cache for existing left and right values, otherwise
     // recurse
     case "^":
       const leftCount =
