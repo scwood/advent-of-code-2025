@@ -27,16 +27,16 @@ function main(argv: string[]): void {
     }
   }
 
-  const answer = countExits(devicesByName["you"]);
+  const answer = countOutputs(devicesByName["you"]);
   console.log(answer);
 }
 
-function countExits(device: Device): number {
+function countOutputs(device: Device): number {
   if (device.name === "out") {
     return 1;
   }
   return device.outputs.reduce((sum, outputDevice) => {
-    return sum + countExits(outputDevice);
+    return sum + countOutputs(outputDevice);
   }, 0);
 }
 
